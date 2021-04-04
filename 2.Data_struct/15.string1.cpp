@@ -4,19 +4,14 @@
 	> Mail: 
 	> Created Time: 2021年04月03日 星期六 20时09分05秒
  ************************************************************************/
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <map>
-#include <cmath>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define MAX_N 1000
-#define TEST(func, a, b) { \
-    printf("TEST %s(%s, %s) = %d\n", #func, a, b, func(a, b)); \
+#define TEST(func, a, b) {\
+    printf("TEST %s(%s, %s) = %d\n", #func, a, b, func(a, b));\
 }
+
 char text[MAX_N + 5], pattern[MAX_N + 5];
 
 int brute_force(char *s, char *t) {
@@ -34,12 +29,12 @@ int brute_force(char *s, char *t) {
 }
 
 int sunday(char *s, char *t) {
-    int ind[128] = {0};
     int len1 = strlen(s);
     int len2 = strlen(t);
+    int ind[128] = {0};
     for (int i = 0; i < 128; i++) ind[i] = len2 + 1;
     for (int i = 0; t[i]; i++) ind[t[i]] = len2 - i;
-    for (int i = 0, I = len1 - len2 + 1; i < I;) {
+    for (int i = 0, I = len1 -len2 + 1; i < I;) {
         int flag = 1;
         for (int j = 0; j < len2; j++) {
             if (t[j] == s[i + j]) continue;
@@ -54,12 +49,12 @@ int sunday(char *s, char *t) {
 
 int shift_and(char *s, char *t) {
     int code[128] = {0};
-    int len = 0;
+    int len;
     for (len = 0; t[len]; len++) {
         code[t[len]] |= (1 << len);
     }
     int p = 0;
-    for (int i = 0; s[i]; i++) {
+    for (int i = 0; s[i]; i++ ) {
         p = (p << 1 | 1) & code[s[i]];
         if (p & (1 << (len - 1))) return i - len + 1;
     }
@@ -73,7 +68,7 @@ int kmp(char *s, char *t) {
     next[0] = -1;
     for (int i = 1, j = -1; i < len2; i++) {
         while (j != -1 && t[j + 1] != t[i]) j = next[j];
-        if (t[j + 1] == t[i]) j += 1;
+        if (t[j + 1] == t[i]) j++;
         next[i] = j;
     }
     for (int i = 0, j = -1; s[i]; i++) {
