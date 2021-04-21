@@ -86,4 +86,52 @@ int main() {
 
 由俩种状态定义可得出状态定义对与ｄｐ问题的复杂与否起着至关重要的作用
 
-三．
+# 三．动态规划的优化
+
+## 1.状态定义优化
+
+ｅｇ：如二．中的题目
+
+## 2.状态转移方程优化
+
+并不是改写状态转移方程而是改写状态转移的方式
+
+ＨＺＯＪ44通过一个二分对000111类型问题的查找优化，进而达到了对状态转移的优化
+
+```
+#include<iostream>
+using namespace std;
+#define MAX_N 500000
+
+int len[MAX_N + 5], ans = 0;
+int dp[MAX_N + 5];
+int a[MAX_N + 5];
+
+int bs(int *arr, int l, int r, int x) {
+    if (l == r) return l;
+    int mid = (l + r) >> 1;
+    if (arr[mid] < x) return bs(arr, mid + 1, r, x);
+    return bs(arr, l, mid, x);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        dp[i] = 1;
+        len[i] = n + 1;
+    }
+    len[++ans] = a[1];
+
+    for (int i = 2; i <= n; i++) {
+        dp[i] = bs(len, 1, ans + 1, a[i]);
+        len[dp[i]] = a[i];
+        ans = max(dp[i], ans);
+    }
+    cout << ans << endl;
+    return 0;
+｝
+```
+
+## 3.程序优化
